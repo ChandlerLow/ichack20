@@ -1,11 +1,35 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request
+
+from service.Crimes.db import db_get_all_alerts, db_update_category, db_add_alert
 
 app = Flask(__name__, static_folder='react/build')
 
+
 # Serve React App
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/', defaults={'path': ''}, methods=['GET'])
+@app.route('/api/alerts', methods=['GET'])
+def get_all_alerts():
+    return {'alerts': db_get_all_alerts()}
+
+
+@app.route('/api/alerts', methods=['POST'])
+def add_alert():
+    image_path = request.json['image_path']
+    db_add_alert(image_path)
+    return "Success"
+
+
+@app.route('/api/alerts', methods=['PUT'])
+def update_category():
+    print(request.json)
+    id = request.json['id']
+    category = request.json['category']
+    db_update_category(id, category)
+    return "Success"
+
+
+@app.route('/<path:path>', methods=['GET'])
 def serve(path):
     if path != "" and os.path.exists(app.static_folder + '/' + path):
         return send_from_directory(app.static_folder, path)
