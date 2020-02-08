@@ -1,0 +1,28 @@
+.alert-box {
+    display: inline-flex;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 5px 5px 5px 10px;
+    color: #bdbdbd;
+}
+
+div {
+    align-items: center;
+}
+
+.btn-outline-primary {
+    margin: 3px;
+}
+
+.btn-outline-danger{
+    margin: 3px;
+}
+
+.btn-outline-secondary{
+    margin: 3px;
+
+}
+.alert-box-camera-id {
+    width: 70%;
+}
