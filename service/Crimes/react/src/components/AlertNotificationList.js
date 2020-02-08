@@ -16,6 +16,8 @@ class AlertNotificationList extends Component {
             </ul>
         );
     }
+
+
 }
 
 export default AlertNotificationList;

@@ -6,7 +6,7 @@ import App from "./App";
 
 var destination = document.querySelector("#container");
 
-ReactDOM.render( <div><App/></div>, destination);
+ReactDOM.render( <App/>, destination);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -1,13 +1,15 @@
 import React, {Component} from "react";
 import AlertNotificationList from "./components/AlertNotificationList"
 import OverlayIncident from "./components/OverlayIncident"
+import './App.css'
+import ResolvedBoxList from "./components/ResolvedBoxList";
 
 class App extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            items: [
+            unresolved: [
                 {
                     id: 1,
                     cameraId: 22,
@@ -20,6 +22,11 @@ class App extends Component {
                 },
                 {
                     id: 3,
+                    cameraId: 42,
+                    image: "./logo512.png"
+                },
+                {
+                    id: 4,
                     cameraId: 42,
                     image: "./logo512.png"
                 }
@@ -40,13 +47,13 @@ class App extends Component {
 
             this.setState((prevState) => {
                 return {
-                    items: prevState.items.concat(newItem)
+                    unresolved: prevState.unresolved.concat(newItem)
                 };
             });
 
             this._inputElement.value = "";
         }
-        console.log(this.state.items);
+        console.log(this.state.unresolved);
 
         e.preventDefault();
 
@@ -59,20 +66,50 @@ class App extends Component {
         });
     };
 
+    onClose = () => {
+        this.setState({
+                showOverlay: false
+            }
+        );
+    };
+
     render() {
         return (
-        <div className="todoListMain">
-        <div className="header">
+            <div className="todoListMain">
+                <div className="map">
 
-        <div style={{width: "600px", height: "300px"}}/>
-        </div>
-        <AlertNotificationList entries={this.state.items} showImage={this.showImage}/>
-            {
-                this.state.showOverlay ? <OverlayIncident image={this.state.overlayImage}/> : "No"
-            }
-        </div>
+                    <div style={{width: "600px", height: "300px"}}/>
+                </div>
+                <h3 className="whiteText">Unresolved</h3>
+                <AlertNotificationList entries={this.state.unresolved} showImage={this.showImage}/>
+                {
+                    this.state.showOverlay ?
+                        <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                }
+
+                <div className="resolved">
+                    <h3 className="whiteText">Crime</h3>
+                    <ResolvedBoxList showImage={this.showImage}/>
+                    {
+                        this.state.showOverlay ?
+                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                    }
+                </div>
+                <div className="resolved">
+                    <h3 className="whiteText">Non-crime</h3>
+                    <ResolvedBoxList showImage={this.showImage}/>
+                    {
+                        this.state.showOverlay ?
+                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                    }
+
+                </div>
+
+
+            </div>
+
         );
     }
-    }
+}
 
-    export default App;
+export default App;

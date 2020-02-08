@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import './OverlayIncident.css';
 
 class OverlayIncident extends Component {
     render() {
@@ -6,6 +7,9 @@ class OverlayIncident extends Component {
         return (
             <div className="imageOverlay">
                 <img src={image} alt="video feed"/>
+                <div className={'overlay-close'} onClick={() => this.props.onClose()}/> {
+                this.props.children
+            }
             </div>
         )
     }
