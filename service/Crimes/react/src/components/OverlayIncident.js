@@ -3,13 +3,19 @@ import './OverlayIncident.css';
 
 class OverlayIncident extends Component {
     render() {
-        const image = this.props.image
+        const image = this.props.image;
         return (
-            <div className="imageOverlay">
-                <img src={image} alt="video feed"/>
-                <div className={'overlay-close'} onClick={() => this.props.onClose()}/> {
-                this.props.children
-            }
+            <div className="imageOverlay"
+                 onClick={() => this.props.onClose()}>
+                <p className={'overlay-info'}>
+                    Click outside of the image to close
+                </p>
+                <div className={'img-wrapper'} onClick={(e) => e.stopPropagation()}>
+                    <img className={'overlay-image'}
+                         src={image}
+                         alt="video feed"
+                         onClick={(e) => e.stopPropagation()} />
+                </div>
             </div>
         )
     }

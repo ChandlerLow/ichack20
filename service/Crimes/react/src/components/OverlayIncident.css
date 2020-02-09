@@ -1,23 +1,27 @@
 .imageOverlay {
     position: fixed;
     margin: auto;
-    top: 20%;
-    left: 20%;
-    width: 60%;
-    height: 60%;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
     border: 3px solid white;
-    border-radius: 4px;
     align-items: center;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0, 0, 0, 0.3);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
 }
 
-img {
-    width: 100%;
-    height:100%;
+.overlay-image {
+    max-width: 90%;
+    max-height: 90%;
 }
 
 .overlay-close {
-    position:absolute;
+    position: absolute;
     margin: auto;
     top: 0;
     left: 0;

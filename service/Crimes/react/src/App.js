@@ -11,31 +11,30 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        const unresolved = [
-            {
-                id: 1,
-                cameraId: 22,
-                image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
-            },
-            {
-                id: 2,
-                cameraId: 32,
-                image: "./logo512.png"
-            },
-            {
-                id: 3,
-                cameraId: 42,
-                image: "./logo512.png"
-            },
-            {
-                id: 4,
-                cameraId: 42,
-                image: "./logo512.png"
-            }
-        ];
-
         this.state = {
-            unresolved: [],
+            unresolved: [
+                {
+                    id: 1,
+                    image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
+                },
+                {
+                    id: 2,
+                    image: "./logo512.png"
+                }
+            ],
+            crime: [
+                {
+                    id: 3,
+                    image: "./logo512.png"
+                }
+
+            ],
+            nonCrime: [
+                {
+                    id: 4,
+                    image: "./logo512.png"
+                }
+            ],
             showOverlay: false
         };
 
@@ -43,9 +42,18 @@ class App extends Component {
     }
 
     fetchAllAlerts = () => {
-        axios.get('/api/alerts').then(response => this.setState({
-            unresolved: response.data.alerts
-        })).catch((error) => console.log(error));
+        axios.get('/api/alerts').then(response => {
+            const alerts = response.data.alerts;
+            const unresolved = alerts.filter(item => item.category === 0);
+            const crime = alerts.filter(item => item.category === 1);
+            const nonCrime = alerts.filter(item => item.category === 2);
+
+            this.setState({
+                unresolved: unresolved,
+                crime: crime,
+                nonCrime: nonCrime
+            })
+        }).catch((error) => console.log(error));
     };
 
     updateCategory = (id, category) => {
@@ -71,29 +79,37 @@ class App extends Component {
 
     render() {
         return (
-            <div className="todoListMain">
+            <div className="pageWrapper">
+                <h1 className={'title'}>au.paire</h1>
                 <div className="map">
-
-                    <div style={{width: "600px", height: "300px"}} />
+                    <h3>(map)</h3>
                 </div>
                 <h3 className="whiteText">Unresolved</h3>
-                <AlertNotificationList entries={this.state.unresolved} showImage={this.showImage} updateCategory={this.updateCategory}/>
+                <AlertNotificationList entries={this.state.unresolved}
+                                       showImage={this.showImage}
+                                       updateCategory={this.updateCategory} />
                 {
                     this.state.showOverlay ?
-                        <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
+                        <OverlayIncident image={this.state.overlayImage}
+                                         onClose={this.onClose} /> : null
                 }
 
                 <div className="resolved">
                     <h3 className="whiteText">Crime</h3>
-                    <ResolvedList showImage={this.showImage} />
+                    <ResolvedList entries={this.state.crime}
+                                  showImage={this.showImage}
+                                  undo={(id) => this.updateCategory(id, 0)} />
                     {
                         this.state.showOverlay ?
-                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
+                            <OverlayIncident image={this.state.overlayImage}
+                                             onClose={this.onClose} /> : null
                     }
                 </div>
                 <div className="resolved">
                     <h3 className="whiteText">Non-crime</h3>
-                    <ResolvedNoncrimeList showImage={this.showImage} />
+                    <ResolvedNoncrimeList entries={this.state.nonCrime}
+                                          showImage={this.showImage}
+                                          undo={(id) => this.updateCategory(id, 0)} />
                     {
                         this.state.showOverlay ?
                             <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
