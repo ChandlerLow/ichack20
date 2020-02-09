@@ -7,10 +7,9 @@ dbname = "ichack20"
 user = "admin"
 password = "marceliscool"
 
-sql_insert_alert = "INSERT INTO `Alerts` (`image_path`) VALUES (%s)"
+sql_insert_alert = "INSERT INTO `Alerts` (`image_path`, `lng`, `lat`) VALUES (%s, %s, %s)"
 sql_select_all_alerts = "SELECT * FROM `Alerts`"
 sql_update_category = "UPDATE `Alerts` SET `Category`=%s WHERE `id`=%s"
-
 
 def db_connect():
     connection = pymysql.connect(host=host,
@@ -22,13 +21,12 @@ def db_connect():
     return connection
 
 
-def db_add_alert(image_path):
+def db_add_alert(image_path, longitude, latitude):
     escaped_path = pymysql.escape_string(image_path)
-
     db = db_connect()
     try:
         with db.cursor() as cursor:
-            cursor.execute(sql_insert_alert, escaped_path)
+            cursor.execute(sql_insert_alert, (escaped_path, longitude, latitude))
         db.commit()
     finally:
         db.close()
@@ -60,7 +58,7 @@ def db_update_category(id, category):
 
 
 if __name__ == '__main__':
-    # add_alert('test/test/test.img')
-    get_all_alerts()
-    update_category(1, 0)
-    get_all_alerts()
+    db_add_alert('testingthomasfull/test/test.img', -69, 51.498356)
+    #get_all_alerts()
+   # update_category(1, 0)
+   # get_all_alerts()

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import './ResolvedList.css';
 import ResolvedBox from "./ResolvedBox";
 
-class ResolvedList extends Component {
+class ResolvedIncidentsList extends Component {
     render() {
         return (
             <ul className="resolvedList">
@@ -20,4 +20,4 @@ class ResolvedList extends Component {
 
 }
 
-export default ResolvedList;
+export default ResolvedIncidentsList;
