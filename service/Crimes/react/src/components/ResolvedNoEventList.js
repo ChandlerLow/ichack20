@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import './ResolvedList.css';
 import ResolvedBox from "./ResolvedBox";
 
-class ResolvedNoncrimeList extends Component {
+class ResolvedNoEventList extends Component {
     render() {
         return (
             <ul className="resolvedList">
@@ -19,4 +19,4 @@ class ResolvedNoncrimeList extends Component {
 
 }
 
-export default ResolvedNoncrimeList;
+export default ResolvedNoEventList;
