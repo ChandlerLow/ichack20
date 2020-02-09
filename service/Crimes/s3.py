@@ -1,5 +1,6 @@
 import boto3
 from botocore.exceptions import NoCredentialsError
+import requests
 
 ACCESS_KEY = 'AKIAYZBVSERNUR76WM7D'
 SECRET_KEY = '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'
@@ -35,9 +36,14 @@ def fetch_from_bucket(bucket, s3_file, local_file):
         return False
 
 
+def test_download() :
+    url = 'http://google.com/favicon.ico'
+    filename = url.split('/')[-1]
+    r = requests.get(url, allow_redirects=True)
+    fw = open("images/coool.ico", 'wb')
+    fw.write(r.content)
+    fw.close()
+
+
 if __name__ == '__main__':
-    # add_alert('test/test/test.img')
-    uploaded = upload_to_bucket('logo512.png', 'ichack20-images', 'logo512.png')
-    print(uploaded)
-    downloaded = fetch_from_bucket('ichack20-images', 'logo512.png', 'test.png')
-    print(downloaded)
+    test_download()
