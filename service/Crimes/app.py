@@ -7,7 +7,6 @@ app = Flask(__name__, static_folder='react/build')
 
 
 # Serve React App
-@app.route('/', defaults={'path': ''}, methods=['GET'])
 @app.route('/api/alerts', methods=['GET'])
 def get_all_alerts():
     return {'alerts': db_get_all_alerts()}
@@ -29,6 +28,7 @@ def update_category():
     return "Success"
 
 
+@app.route('/', defaults={'path': ''}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])
 def serve(path):
     if path != "" and os.path.exists(app.static_folder + '/' + path):
