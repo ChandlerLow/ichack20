@@ -10,7 +10,8 @@ class ResolvedNoncrimeList extends Component {
                     this.props.entries.map(item => <ResolvedBox key={item.id}
                                                                 item={item}
                                                                 showImage={this.props.showImage}
-                                                                undo={this.props.undo} />)
+                                                                undo={this.props.undo}
+                                                                showMarker={this.props.showMarker}/>)
                 }
             </ul>
         );
