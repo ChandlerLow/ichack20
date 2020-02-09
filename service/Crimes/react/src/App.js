@@ -12,39 +12,49 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        // this.state = {
-        //     unresolved: [
-        //         {
-        //             id: 1,
-        //             image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
-        //         },
-        //         {
-        //             id: 2,
-        //             image: "./logo512.png"
-        //         }
-        //     ],
-        //     crime: [
-        //         {
-        //             id: 3,
-        //             image: "./logo512.png"
-        //         }
-        //
-        //     ],
-        //     nonCrime: [
-        //         {
-        //             id: 4,
-        //             image: "./logo512.png"
-        //         }
-        //     ],
-        //     showOverlay: false
-        // };
         this.state = {
-            alerts: [],
-            unresolved: [],
-            crime: [],
-            nonCrime: [],
-            showOverlay: false
+            unresolved: [
+                {
+                    id: 1,
+                    image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4',
+                    lat: 0,
+                    lng: 0
+                },
+                {
+                    id: 2,
+                    image: "./logo512.png",
+                    lat: 51.497799,
+                    lng: -0.179220
+                }
+            ],
+            crime: [
+                {
+                    id: 3,
+                    image: "./logo512.png",
+                    lat: 51.497799,
+                    lng: -0.179220
+                }
+
+            ],
+            nonCrime: [
+                {
+                    id: 4,
+                    image: "./logo512.png",
+                    lat: 51.497799,
+                    lng: -0.179220
+                }
+            ],
+            showOverlay: false,
+            showMark: false
         };
+        // this.state = {
+        //     alerts: [],
+        //     unresolved: [],
+        //     crime: [],
+        //     nonCrime: [],
+        //     showOverlay: false,
+        //     showMarker: false,
+        // };
 
         this.fetchAllAlerts();
     }
@@ -79,6 +89,16 @@ class App extends Component {
         });
     };
 
+    showMarker = (lat, long, id) => {
+
+        this.setState({
+            showMark: true,
+            showLng: long,
+            showLat: lat,
+            markId: id
+        });
+    };
+
     onClose = () => {
         this.setState({
                 showOverlay: false
@@ -86,40 +106,55 @@ class App extends Component {
         );
     };
 
+    closeMarker = () => {
+        this.setState({
+            showMark: false,
+        });
+    };
+
     render() {
         return (
             <div className="pageWrapper">
-                <h1 className={'title'}>au.paire</h1>
-                <Map alerts={this.state.alerts} />
+                <h1 className={'title'}>Map</h1>
+                <Map alerts={this.state.alerts}
+                     showMark={this.state.showMark}
+                     showLng={this.state.showLng}
+                     showLat={this.state.showLat}
+                     markId={this.state.markId}
+                     onClose={this.closeMarker}
+                />
                 <h3 className="whiteText">Unresolved</h3>
                 <AlertNotificationList entries={this.state.unresolved}
                                        showImage={this.showImage}
-                                       updateCategory={this.updateCategory} />
+                                       showMarker={this.showMarker}
+                                       updateCategory={this.updateCategory}/>
                 {
                     this.state.showOverlay ?
                         <OverlayIncident image={this.state.overlayImage}
-                                         onClose={this.onClose} /> : null
+                                         onClose={this.onClose}/> : null
                 }
 
                 <div className="resolved">
                     <h3 className="whiteText">Crime</h3>
                     <ResolvedList entries={this.state.crime}
                                   showImage={this.showImage}
-                                  undo={(id) => this.updateCategory(id, 0)} />
+                                  showMarker={this.showMarker}
+                                  undo={(id) => this.updateCategory(id, 0)}/>
                     {
                         this.state.showOverlay ?
                             <OverlayIncident image={this.state.overlayImage}
-                                             onClose={this.onClose} /> : null
+                                             onClose={this.onClose}/> : null
                     }
                 </div>
                 <div className="resolved">
                     <h3 className="whiteText">Non-crime</h3>
                     <ResolvedNoncrimeList entries={this.state.nonCrime}
                                           showImage={this.showImage}
-                                          undo={(id) => this.updateCategory(id, 0)} />
+                                          showMarker={this.showMarker}
+                                          undo={(id) => this.updateCategory(id, 0)}/>
                     {
                         this.state.showOverlay ?
-                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
+                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
                     }
 
                 </div>
