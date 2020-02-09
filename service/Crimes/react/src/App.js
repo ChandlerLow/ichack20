@@ -4,6 +4,7 @@ import OverlayIncident from "./components/OverlayIncident"
 import './App.css'
 import ResolvedList from "./components/ResolvedList";
 import ResolvedNoncrimeList from "./components/ResolvedNoncrimeList";
+import Map from "./components/Map";
 
 const axios = require('axios');
 
@@ -11,30 +12,36 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        // this.state = {
+        //     unresolved: [
+        //         {
+        //             id: 1,
+        //             image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
+        //         },
+        //         {
+        //             id: 2,
+        //             image: "./logo512.png"
+        //         }
+        //     ],
+        //     crime: [
+        //         {
+        //             id: 3,
+        //             image: "./logo512.png"
+        //         }
+        //
+        //     ],
+        //     nonCrime: [
+        //         {
+        //             id: 4,
+        //             image: "./logo512.png"
+        //         }
+        //     ],
+        //     showOverlay: false
+        // };
         this.state = {
-            unresolved: [
-                {
-                    id: 1,
-                    image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
-                },
-                {
-                    id: 2,
-                    image: "./logo512.png"
-                }
-            ],
-            crime: [
-                {
-                    id: 3,
-                    image: "./logo512.png"
-                }
-
-            ],
-            nonCrime: [
-                {
-                    id: 4,
-                    image: "./logo512.png"
-                }
-            ],
+            unresolved: [],
+            crime: [],
+            nonCrime: [],
             showOverlay: false
         };
 
@@ -81,9 +88,11 @@ class App extends Component {
         return (
             <div className="pageWrapper">
                 <h1 className={'title'}>au.paire</h1>
+
                 <div className="map">
                     <h3>(map)</h3>
                 </div>
+                <Map />
                 <h3 className="whiteText">Unresolved</h3>
                 <AlertNotificationList entries={this.state.unresolved}
                                        showImage={this.showImage}

@@ -2,12 +2,6 @@
     font-size: 5vmin;
 }
 
-.map {
-    width: 600px;
-    height: 300px;
-    border-color: white;
-    border: 1px solid;
-}
 
 .whiteText {
     color: white;

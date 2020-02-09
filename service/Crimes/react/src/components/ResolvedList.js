@@ -7,7 +7,8 @@ class ResolvedList extends Component {
         return (
             <ul className="resolvedList">
                 {
-                    this.props.entries.map(item => <ResolvedBox item={item}
+                    this.props.entries.map(item => <ResolvedBox key={item.id}
+                                                                item={item}
                                                                 showImage={this.props.showImage}
                                                                 undo={this.props.undo} />)
                 }
