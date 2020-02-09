@@ -5,60 +5,25 @@ import './App.css'
 import ResolvedList from "./components/ResolvedList";
 import ResolvedNoncrimeList from "./components/ResolvedNoncrimeList";
 
+const axios = require('axios');
+
 class App extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            unresolved: [
-                {
-                    id: 1,
-                    cameraId: 22,
-                    image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
-                },
-                {
-                    id: 2,
-                    cameraId: 32,
-                    image: "./logo512.png"
-                },
-                {
-                    id: 3,
-                    cameraId: 42,
-                    image: "./logo512.png"
-                },
-                {
-                    id: 4,
-                    cameraId: 42,
-                    image: "./logo512.png"
-                }
-            ],
+            unresolved: [],
             showOverlay: false
         };
 
-        this.addItem = this.addItem.bind(this);
+        this.fetchAllAlerts();
     }
 
-    addItem(e) {
-
-        if (this._inputElement.value !== "") {
-            var newItem = {
-                text: this._inputElement.value,
-                key: Date.now()
-            };
-
-            this.setState((prevState) => {
-                return {
-                    unresolved: prevState.unresolved.concat(newItem)
-                };
-            });
-
-            this._inputElement.value = "";
-        }
-        console.log(this.state.unresolved);
-
-        e.preventDefault();
-
-    }
+    fetchAllAlerts = () => {
+        axios.get('/api/alerts').then(response => this.setState({
+            unresolved: response.data.alerts
+        })).catch((error) => console.log(error));
+    };
 
     showImage = (image) => {
         this.setState({
