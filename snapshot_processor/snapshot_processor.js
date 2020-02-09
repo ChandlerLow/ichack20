@@ -6,6 +6,7 @@ const {
 const imageScaleFactor = 0.5;
 const outputStride = 16;
 const flipHorizontal = false;
+const axios = require('axios');
 
 var fs = require('fs'),
     request = require('request');
@@ -26,7 +27,7 @@ var download = function(uri, filename, callback){
 let suspicious_image_count = 0;
 const count_deduction = 2;
 
-const analyse = async (local_path) => {
+const analyse = async (local_path, meraki_url) => {
 
     console.log('loading image from local');
     const img = new Image();
@@ -44,12 +45,20 @@ const analyse = async (local_path) => {
         for (const keypoint of pose.keypoints) {
             keypoints[keypoint.part] = keypoint.position;
         }
-        if (!(Math.abs(keypoints['leftShoulder'].y - keypoints['leftHip'].y) < 200
-            || Math.abs(keypoints['rightShoulder'].y - keypoints['rightHip'].y) < 200)) {
+        if (Math.min(keypoints['leftShoulder'].y, keypoints['rightShoulder'].y) < Math.max(keypoints['leftHip'].y, keypoints['rightHip'].y) ) {
             suspicious_image_count += 1;
             console.log('detected flat');
-            if (suspicious_image_count >= 5) {
-                console.log('ALERT');
+            if (suspicious_image_count >= 3) {
+                axios.post('http://ec2-3-10-154-209.eu-west-2.compute.amazonaws.com/api/alerts', {
+                                  image_path: meraki_url,
+                                  image_name: Date.now().toString()
+                                })
+                                .then((res) => {
+                                  console.log(`statusCode: ${res.statusCode}`)
+                                })
+                                .catch((error) => {
+                                  console.error(error)
+                                })
             }
             return;
         }
@@ -61,7 +70,7 @@ const analyse = async (local_path) => {
 const runSnapshotAnalysis = async(iteration, snapshot_url) => {
     console.log('Fetching snapshot from', snapshot_url);
     const temp_file_name = 'snapshots1' +  + '/image' + iteration + '.jpeg';
-    download(snapshot_url, temp_file_name, function() { analyse(temp_file_name)})
+    download(snapshot_url, temp_file_name, function() { analyse(temp_file_name, snapshot_url)})
 };
 
 const findSnapshotLink = async(snapshot_url) => {
