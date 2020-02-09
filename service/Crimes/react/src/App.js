@@ -43,7 +43,8 @@ class App extends Component {
             unresolved: [],
             crime: [],
             nonCrime: [],
-            showOverlay: false
+            showOverlay: false,
+            showMarker: false,
         };
 
         this.fetchAllAlerts();
@@ -79,6 +80,14 @@ class App extends Component {
         });
     };
 
+    showMarker = (lat, long) => {
+        this.setState({
+            showMarker: true,
+            showLong: long,
+            showLat: lat
+        });
+    };
+
     onClose = () => {
         this.setState({
                 showOverlay: false
@@ -90,36 +99,39 @@ class App extends Component {
         return (
             <div className="pageWrapper">
                 <h1 className={'title'}>au.paire</h1>
-                <Map alerts={this.state.alerts} />
+                <Map alerts={this.state.alerts}/>
                 <h3 className="whiteText">Unresolved</h3>
                 <AlertNotificationList entries={this.state.unresolved}
                                        showImage={this.showImage}
-                                       updateCategory={this.updateCategory} />
+                                       showMarker={this.showMarker}
+                                       updateCategory={this.updateCategory}/>
                 {
                     this.state.showOverlay ?
                         <OverlayIncident image={this.state.overlayImage}
-                                         onClose={this.onClose} /> : null
+                                         onClose={this.onClose}/> : null
                 }
 
                 <div className="resolved">
                     <h3 className="whiteText">Crime</h3>
                     <ResolvedList entries={this.state.crime}
                                   showImage={this.showImage}
-                                  undo={(id) => this.updateCategory(id, 0)} />
+                                  showMarker={this.showMarker}
+                                  undo={(id) => this.updateCategory(id, 0)}/>
                     {
                         this.state.showOverlay ?
                             <OverlayIncident image={this.state.overlayImage}
-                                             onClose={this.onClose} /> : null
+                                             onClose={this.onClose}/> : null
                     }
                 </div>
                 <div className="resolved">
                     <h3 className="whiteText">Non-crime</h3>
                     <ResolvedNoncrimeList entries={this.state.nonCrime}
                                           showImage={this.showImage}
-                                          undo={(id) => this.updateCategory(id, 0)} />
+                                          showMarker={this.showMarker}
+                                          undo={(id) => this.updateCategory(id, 0)}/>
                     {
                         this.state.showOverlay ?
-                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
+                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
                     }
 
                 </div>
