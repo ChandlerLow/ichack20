@@ -27,11 +27,12 @@ export default class Map extends Component {
                     defaultCenter={this.state.center}
                     defaultZoom={this.state.zoom}
                 >
-                    <Marker
-                        lat={51.497799}
-                        lng={-0.179220}
-                        text="My Marker"
-                    />
+                    {
+                        this.props.alerts.map(item => <Marker key={item.id}
+                                                              lat={item.lat}
+                                                              lng={item.lng}
+                                                              text={'Alert ' + item.id}/>)
+                    }
                 </GoogleMapReact>
             </div>
     );

@@ -39,6 +39,7 @@ class App extends Component {
         //     showOverlay: false
         // };
         this.state = {
+            alerts: [],
             unresolved: [],
             crime: [],
             nonCrime: [],
@@ -56,6 +57,7 @@ class App extends Component {
             const nonCrime = alerts.filter(item => item.category === 2);
 
             this.setState({
+                alerts: alerts,
                 unresolved: unresolved,
                 crime: crime,
                 nonCrime: nonCrime
@@ -88,11 +90,7 @@ class App extends Component {
         return (
             <div className="pageWrapper">
                 <h1 className={'title'}>au.paire</h1>
-
-                <div className="map">
-                    <h3>(map)</h3>
-                </div>
-                <Map />
+                <Map alerts={this.state.alerts} />
                 <h3 className="whiteText">Unresolved</h3>
                 <AlertNotificationList entries={this.state.unresolved}
                                        showImage={this.showImage}
