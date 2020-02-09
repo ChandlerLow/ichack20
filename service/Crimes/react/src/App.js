@@ -4,6 +4,7 @@ import OverlayIncident from "./components/OverlayIncident"
 import './App.css'
 import ResolvedList from "./components/ResolvedList";
 import ResolvedNoncrimeList from "./components/ResolvedNoncrimeList";
+import Map from "./components/Map";
 
 const axios = require('axios');
 
@@ -11,31 +12,37 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        const unresolved = [
-            {
-                id: 1,
-                image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4',
-                category: 0
-            },
-            {
-                id: 2,
-                image: "./logo512.png",
-                category: 1
-            },
-            {
-                id: 3,
-                image: "./logo512.png",
-                category: 0
-            },
-            {
-                id: 4,
-                image: "./logo512.png",
-                category: 2
-            }
-        ];
-
+        // this.state = {
+        //     unresolved: [
+        //         {
+        //             id: 1,
+        //             image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
+        //         },
+        //         {
+        //             id: 2,
+        //             image: "./logo512.png"
+        //         }
+        //     ],
+        //     crime: [
+        //         {
+        //             id: 3,
+        //             image: "./logo512.png"
+        //         }
+        //
+        //     ],
+        //     nonCrime: [
+        //         {
+        //             id: 4,
+        //             image: "./logo512.png"
+        //         }
+        //     ],
+        //     showOverlay: false
+        // };
         this.state = {
+            alerts: [],
             unresolved: [],
+            crime: [],
+            nonCrime: [],
             showOverlay: false
         };
 
@@ -43,19 +50,26 @@ class App extends Component {
     }
 
     fetchAllAlerts = () => {
-        axios.get('/api/alerts').then(response => this.setState({
-            unresolved: response.data.alerts
-        })).catch((error) => console.log(error));
+        axios.get('/api/alerts').then(response => {
+            const alerts = response.data.alerts;
+            const unresolved = alerts.filter(item => item.category === 0);
+            const crime = alerts.filter(item => item.category === 1);
+            const nonCrime = alerts.filter(item => item.category === 2);
+
+            this.setState({
+                alerts: alerts,
+                unresolved: unresolved,
+                crime: crime,
+                nonCrime: nonCrime
+            })
+        }).catch((error) => console.log(error));
     };
 
-    getAlerts = (category) => {
-        let items = [];
-        this.state.unresolved.forEach(function(item) {
-            if (item.category === category) {
-                items.push(item)
-            }
-        });
-        return items;
+    updateCategory = (id, category) => {
+        axios.put('/api/alerts', {
+            id: id,
+            category: category
+        }).then(this.fetchAllAlerts).catch(error => console.log(error));
     };
 
     showImage = (image) => {
@@ -74,32 +88,38 @@ class App extends Component {
 
     render() {
         return (
-            <div className="todoListMain">
-                <div className="map">
-
-                    <div style={{width: "600px", height: "300px"}}/>
-                </div>
+            <div className="pageWrapper">
+                <h1 className={'title'}>au.paire</h1>
+                <Map alerts={this.state.alerts} />
                 <h3 className="whiteText">Unresolved</h3>
-                <AlertNotificationList entries={this.getAlerts(0)} showImage={this.showImage}/>
+                <AlertNotificationList entries={this.state.unresolved}
+                                       showImage={this.showImage}
+                                       updateCategory={this.updateCategory} />
                 {
                     this.state.showOverlay ?
-                        <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                        <OverlayIncident image={this.state.overlayImage}
+                                         onClose={this.onClose} /> : null
                 }
 
                 <div className="resolved">
                     <h3 className="whiteText">Crime</h3>
-                    <ResolvedList entries={this.getAlerts(1)} showImage={this.showImage}/>
+                    <ResolvedList entries={this.state.crime}
+                                  showImage={this.showImage}
+                                  undo={(id) => this.updateCategory(id, 0)} />
                     {
                         this.state.showOverlay ?
-                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                            <OverlayIncident image={this.state.overlayImage}
+                                             onClose={this.onClose} /> : null
                     }
                 </div>
                 <div className="resolved">
                     <h3 className="whiteText">Non-crime</h3>
-                    <ResolvedNoncrimeList entries={this.getAlerts(2)} showImage={this.showImage}/>
+                    <ResolvedNoncrimeList entries={this.state.nonCrime}
+                                          showImage={this.showImage}
+                                          undo={(id) => this.updateCategory(id, 0)} />
                     {
                         this.state.showOverlay ?
-                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
                     }
 
                 </div>

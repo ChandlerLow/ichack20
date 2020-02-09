@@ -5,13 +5,14 @@ import AlertNotification from "./AlertNotification";
 class AlertNotificationList extends Component {
 
     render() {
-        var todoEntries = this.props.entries;
-
+        const items = this.props.entries;
         return (
             <ul className="theList">
                 {
-                    todoEntries.map(item => <AlertNotification item={item}
-                    showImage={this.props.showImage}/>)
+                    items.map(item => <AlertNotification key={item.id}
+                                                         item={item}
+                                                         showImage={this.props.showImage}
+                                                         updateCategory={this.props.updateCategory} />)
                 }
             </ul>
         );
