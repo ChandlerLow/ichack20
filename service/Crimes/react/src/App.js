@@ -14,23 +14,23 @@ class App extends Component {
         const unresolved = [
             {
                 id: 1,
-                cameraId: 22,
-                image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
+                image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4',
+                category: 0
             },
             {
                 id: 2,
-                cameraId: 32,
-                image: "./logo512.png"
+                image: "./logo512.png",
+                category: 1
             },
             {
                 id: 3,
-                cameraId: 42,
-                image: "./logo512.png"
+                image: "./logo512.png",
+                category: 0
             },
             {
                 id: 4,
-                cameraId: 42,
-                image: "./logo512.png"
+                image: "./logo512.png",
+                category: 2
             }
         ];
 
@@ -46,6 +46,16 @@ class App extends Component {
         axios.get('/api/alerts').then(response => this.setState({
             unresolved: response.data.alerts
         })).catch((error) => console.log(error));
+    };
+
+    getAlerts = (category) => {
+        let items = [];
+        this.state.unresolved.forEach(function(item) {
+            if (item.category === category) {
+                items.push(item)
+            }
+        });
+        return items;
     };
 
     showImage = (image) => {
@@ -70,7 +80,7 @@ class App extends Component {
                     <div style={{width: "600px", height: "300px"}}/>
                 </div>
                 <h3 className="whiteText">Unresolved</h3>
-                <AlertNotificationList entries={this.state.unresolved} showImage={this.showImage}/>
+                <AlertNotificationList entries={this.getAlerts(0)} showImage={this.showImage}/>
                 {
                     this.state.showOverlay ?
                         <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
@@ -78,7 +88,7 @@ class App extends Component {
 
                 <div className="resolved">
                     <h3 className="whiteText">Crime</h3>
-                    <ResolvedList showImage={this.showImage}/>
+                    <ResolvedList entries={this.getAlerts(1)} showImage={this.showImage}/>
                     {
                         this.state.showOverlay ?
                             <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
@@ -86,7 +96,7 @@ class App extends Component {
                 </div>
                 <div className="resolved">
                     <h3 className="whiteText">Non-crime</h3>
-                    <ResolvedNoncrimeList showImage={this.showImage}/>
+                    <ResolvedNoncrimeList entries={this.getAlerts(2)} showImage={this.showImage}/>
                     {
                         this.state.showOverlay ?
                             <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null

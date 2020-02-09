@@ -29,7 +29,7 @@ class ResolvedList extends Component {
 
 
     render() {
-        const todoEntries = this.state.resolved;
+        const todoEntries = this.props.entries;
 
         return (
             <ul className="resolvedList">
