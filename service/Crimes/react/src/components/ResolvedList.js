@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import './ResolvedBoxList.css';
+import './ResolvedList.css';
 import ResolvedBox from "./ResolvedBox";
 
-class ResolvedBoxList extends Component {
+class ResolvedList extends Component {
     constructor(props) {
         super(props);
 
@@ -44,4 +44,4 @@ class ResolvedBoxList extends Component {
 
 }
 
-export default ResolvedBoxList;
+export default ResolvedList;

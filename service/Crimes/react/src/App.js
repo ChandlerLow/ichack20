@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import AlertNotificationList from "./components/AlertNotificationList"
 import OverlayIncident from "./components/OverlayIncident"
 import './App.css'
-import ResolvedBoxList from "./components/ResolvedBoxList";
+import ResolvedList from "./components/ResolvedList";
+import ResolvedNoncrimeList from "./components/ResolvedNoncrimeList";
 
 class App extends Component {
     constructor(props) {
@@ -89,7 +90,7 @@ class App extends Component {
 
                 <div className="resolved">
                     <h3 className="whiteText">Crime</h3>
-                    <ResolvedBoxList showImage={this.showImage}/>
+                    <ResolvedList showImage={this.showImage}/>
                     {
                         this.state.showOverlay ?
                             <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
@@ -97,7 +98,7 @@ class App extends Component {
                 </div>
                 <div className="resolved">
                     <h3 className="whiteText">Non-crime</h3>
-                    <ResolvedBoxList showImage={this.showImage}/>
+                    <ResolvedNoncrimeList showImage={this.showImage}/>
                     {
                         this.state.showOverlay ?
                             <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
