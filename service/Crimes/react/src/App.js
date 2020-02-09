@@ -11,6 +11,29 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        const unresolved = [
+            {
+                id: 1,
+                cameraId: 22,
+                image: 'https://avatars2.githubusercontent.com/u/199657?s=88&v=4'
+            },
+            {
+                id: 2,
+                cameraId: 32,
+                image: "./logo512.png"
+            },
+            {
+                id: 3,
+                cameraId: 42,
+                image: "./logo512.png"
+            },
+            {
+                id: 4,
+                cameraId: 42,
+                image: "./logo512.png"
+            }
+        ];
+
         this.state = {
             unresolved: [],
             showOverlay: false
