@@ -23,7 +23,11 @@ var download = function(uri, filename, callback){
   });
 };
 
+let suspicious_image_count = 0;
+const count_deduction = 2;
+
 const analyse = async (local_path) => {
+
     console.log('loading image from local');
     const img = new Image();
     img.src = local_path;
@@ -33,16 +37,30 @@ const analyse = async (local_path) => {
     console.log('Estimating pose from image.');
     const net = await posenet.load();
     const input = tf.browser.fromPixels(canvas);
-    const pose = await net.estimateSinglePose(input, imageScaleFactor, flipHorizontal, outputStride);
-    for (const keypoint of pose.keypoints) {
-        console.log(`${keypoint.part}: (${keypoint.position.x},${keypoint.position.y})`);
+    const poses = await net.estimateMultiplePoses(input, imageScaleFactor, flipHorizontal, outputStride);
+    for (const pose of poses) {
+        console.log('pose');
+        const keypoints = {};
+        for (const keypoint of pose.keypoints) {
+            keypoints[keypoint.part] = keypoint.position;
+        }
+        if (Math.abs(keypoints['leftShoulder'].y - keypoints['leftHip'].y) < 400
+            || Math.abs(keypoints['rightShoulder'].y - keypoints['rightHip'].y) < 400) {
+            suspicious_image_count += 1;
+            console.log('detected flat');
+            if (suspicious_image_count >= 5) {
+                console.log('ALERT');
+            }
+            return;
+        }
     }
+    suspicious_image_count = Math.max(0, suspicious_image_count - count_deduction)
     console.log('end');
-}
+};
 
-const runSnapshotAnalysis = async(snapshot_url) => {
+const runSnapshotAnalysis = async(iteration, snapshot_url) => {
     console.log('Fetching snapshot from', snapshot_url);
-    const temp_file_name = 'testings.jpeg';
+    const temp_file_name = 'snapshots0/image' + iteration + '.jpeg';
     download(snapshot_url, temp_file_name, function() { analyse(temp_file_name)})
 };
 
@@ -71,35 +89,12 @@ const findSnapshotLink = async(snapshot_url) => {
     });
 };
 
-findSnapshotLink('https://api.meraki.com/api/v0/networks/L_575897802350005367/cameras/Q2FV-ZUXG-MZ79/snapshot')
-    .then(url => runSnapshotAnalysis(url));
+const recursiveLoop = (iteration) => {
+    findSnapshotLink('https://api.meraki.com/api/v0/networks/L_575897802350005367/cameras/Q2FV-ZUXG-MZ79/snapshot')
+        .then(url => runSnapshotAnalysis(iteration, url))
+    setTimeout(function() {
+        recursiveLoop(iteration+1)
+    }, 5000);
+};
 
-
-// const net = await posenet.load();
-// const input = tf.browser.fromPixels(canvas);
-// const pose = await net.estimateSinglePose(input, imageScaleFactor, flipHorizontal, outputStride);
-// for(const keypoint of pose.keypoints) {
-//     console.log(`${keypoint.part}: (${keypoint.position.x},${keypoint.position.y})`);
-// }
-// console.log('end');
-
-
-// request({
-//         uri: 'https://api.meraki.com/api/v0/networks/L_575897802350005367/cameras/Q2FV-ZUXG-MZ79/snapshot',
-//         method: 'POST',
-//         headers: {
-//             'X-Cisco-Meraki-API-Key': '96850833f85705851d736e34914eea6db9360280',
-//             'Accept': 'application/json'
-//         }
-//     },
-//     (err, res, body) => {
-//       if (res.statusCode === 308 && res.headers.location) {
-//           console.log('308');
-//           runSnapshotAnalysis(res.headers.location).then(r => console.log("hehe"))
-//       } else if (err) {
-//         return console.log(err);
-//       } else {
-//           console.log(res.statusCode);
-//           console.log(body.explanation);
-//       }
-// });
+recursiveLoop(0);
