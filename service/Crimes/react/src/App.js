@@ -48,6 +48,13 @@ class App extends Component {
         })).catch((error) => console.log(error));
     };
 
+    updateCategory = (id, category) => {
+        axios.put('/api/alerts', {
+            id: id,
+            category: category
+        }).then(this.fetchAllAlerts).catch(error => console.log(error));
+    };
+
     showImage = (image) => {
         this.setState({
             showOverlay: true,
@@ -67,29 +74,29 @@ class App extends Component {
             <div className="todoListMain">
                 <div className="map">
 
-                    <div style={{width: "600px", height: "300px"}}/>
+                    <div style={{width: "600px", height: "300px"}} />
                 </div>
                 <h3 className="whiteText">Unresolved</h3>
-                <AlertNotificationList entries={this.state.unresolved} showImage={this.showImage}/>
+                <AlertNotificationList entries={this.state.unresolved} showImage={this.showImage} updateCategory={this.updateCategory}/>
                 {
                     this.state.showOverlay ?
-                        <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                        <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
                 }
 
                 <div className="resolved">
                     <h3 className="whiteText">Crime</h3>
-                    <ResolvedList showImage={this.showImage}/>
+                    <ResolvedList showImage={this.showImage} />
                     {
                         this.state.showOverlay ?
-                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
                     }
                 </div>
                 <div className="resolved">
                     <h3 className="whiteText">Non-crime</h3>
-                    <ResolvedNoncrimeList showImage={this.showImage}/>
+                    <ResolvedNoncrimeList showImage={this.showImage} />
                     {
                         this.state.showOverlay ?
-                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose}/> : null
+                            <OverlayIncident image={this.state.overlayImage} onClose={this.onClose} /> : null
                     }
 
                 </div>

@@ -11,7 +11,8 @@ class AlertNotificationList extends Component {
             <ul className="theList">
                 {
                     todoEntries.map(item => <AlertNotification item={item}
-                    showImage={this.props.showImage}/>)
+                                                               showImage={this.props.showImage}
+                                                               updateCategory={this.props.updateCategory}/>)
                 }
             </ul>
         );
