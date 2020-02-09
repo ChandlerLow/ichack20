@@ -44,8 +44,8 @@ const analyse = async (local_path) => {
         for (const keypoint of pose.keypoints) {
             keypoints[keypoint.part] = keypoint.position;
         }
-        if (Math.abs(keypoints['leftShoulder'].y - keypoints['leftHip'].y) < 400
-            || Math.abs(keypoints['rightShoulder'].y - keypoints['rightHip'].y) < 400) {
+        if (!(Math.abs(keypoints['leftShoulder'].y - keypoints['leftHip'].y) < 200
+            || Math.abs(keypoints['rightShoulder'].y - keypoints['rightHip'].y) < 200)) {
             suspicious_image_count += 1;
             console.log('detected flat');
             if (suspicious_image_count >= 5) {
@@ -60,7 +60,7 @@ const analyse = async (local_path) => {
 
 const runSnapshotAnalysis = async(iteration, snapshot_url) => {
     console.log('Fetching snapshot from', snapshot_url);
-    const temp_file_name = 'snapshots0/image' + iteration + '.jpeg';
+    const temp_file_name = 'snapshots1' +  + '/image' + iteration + '.jpeg';
     download(snapshot_url, temp_file_name, function() { analyse(temp_file_name)})
 };
 
