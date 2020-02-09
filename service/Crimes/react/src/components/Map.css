@@ -3,3 +3,9 @@
     height: 300px;
     border: 1px solid white;
 }
+
+.marker {
+    color: black;
+    width: 40px;
+    text-align: center;
+}

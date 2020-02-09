@@ -6,9 +6,11 @@ class AlertNotification extends Component {
     render() {
         return (
             <div className={'alert-box'}>
-                <div className={'alert-box-camera-id'}>
-                    Alert: {this.props.item.id
-                }</div>
+
+                <div className={'alert-box-camera-id'}
+                onClick={() => this.props.showMarker(this.props.item.lat, this.props.item.lng, this.props.item.id)}>
+                    Alert: {this.props.item.id}
+                </div>
                 <button type="view"
                         className="btn btn-outline-primary"
                         onClick={() => this.props.showImage(this.props.item.image_path)}>
