@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import './ResolvedList.css';
 import ResolvedBox from "./ResolvedBox";
 
-class ResolvedNoncrimeList extends Component {
+class ResolvedIncidentsList extends Component {
     render() {
         return (
             <ul className="resolvedList">
@@ -10,12 +10,14 @@ class ResolvedNoncrimeList extends Component {
                     this.props.entries.map(item => <ResolvedBox key={item.id}
                                                                 item={item}
                                                                 showImage={this.props.showImage}
-                                                                undo={this.props.undo} />)
+                                                                undo={this.props.undo}
+                                                                showMarker={this.props.showMarker}/>)
                 }
             </ul>
         );
     }
 
+
 }
 
-export default ResolvedNoncrimeList;
+export default ResolvedIncidentsList;
