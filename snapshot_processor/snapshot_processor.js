@@ -45,22 +45,24 @@ const analyse = async (local_path, meraki_url) => {
         for (const keypoint of pose.keypoints) {
             keypoints[keypoint.part] = keypoint.position;
         }
-        if (Math.min(keypoints['leftShoulder'].y, keypoints['rightShoulder'].y) < Math.max(keypoints['leftHip'].y, keypoints['rightHip'].y) ) {
-            suspicious_image_count += 1;
-            console.log('detected flat');
-            if (suspicious_image_count >= 3) {
-                axios.post('http://ec2-3-10-154-209.eu-west-2.compute.amazonaws.com/api/alerts', {
-                                  image_path: meraki_url,
-                                  image_name: Date.now().toString()
-                                })
-                                .then((res) => {
-                                  console.log(`statusCode: ${res.statusCode}`)
-                                })
-                                .catch((error) => {
-                                  console.error(error)
-                                })
+        if (keypoints['leftShoulder'].y < keypoints['leftKnee'].y || keypoints['rightShoulder'].y < keypoints['rightKnee'].y) {
+            if (pose.score > 0.1) {
+                suspicious_image_count += 1;
+                console.log('detected flat');
+                if (suspicious_image_count >= 5) {
+                    axios.post('http://ec2-3-10-154-209.eu-west-2.compute.amazonaws.com/api/alerts', {
+                        image_path: meraki_url,
+                        image_name: Date.now().toString()
+                    })
+                        .then((res) => {
+                            console.log(`statusCode: ${res.statusCode}`)
+                        })
+                        .catch((error) => {
+                            console.error(error)
+                        })
+                }
+                return;
             }
-            return;
         }
     }
     suspicious_image_count = Math.max(0, suspicious_image_count - count_deduction)
