@@ -19,7 +19,7 @@ class AlertNotification extends Component {
                 <button type="crime"
                         className="btn btn-outline-danger"
                         onClick={() => this.props.updateCategory(this.props.item.id, 1)}>
-                    Crime
+                    Incident
                 </button>
                 <button type="dismiss"
                         className="btn btn-outline-secondary"
