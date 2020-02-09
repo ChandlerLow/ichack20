@@ -9,9 +9,10 @@ class AlertNotificationList extends Component {
         return (
             <ul className="theList">
                 {
-                    items.map(item => <AlertNotification item={item}
-                                                               showImage={this.props.showImage}
-                                                               updateCategory={this.props.updateCategory} />)
+                    items.map(item => <AlertNotification key={item.id}
+                                                         item={item}
+                                                         showImage={this.props.showImage}
+                                                         updateCategory={this.props.updateCategory} />)
                 }
             </ul>
         );
