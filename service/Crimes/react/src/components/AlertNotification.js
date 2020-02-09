@@ -11,7 +11,7 @@ class AlertNotification extends Component {
                 }</div>
                 <button type="view"
                         className="btn btn-outline-primary"
-                        onClick={() => this.props.showImage(this.props.item.image)}>
+                        onClick={() => this.props.showImage(this.props.item.image_path)}>
                     View
                 </button>
                 <button type="crime"
