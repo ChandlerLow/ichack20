@@ -6,27 +6,27 @@ const {
 const imageScaleFactor = 0.5;
 const outputStride = 16;
 const flipHorizontal = false;
-const request = require('request');
-const https = require('https');
-const fs = require('fs');
 
+var fs = require('fs'),
+    request = require('request');
+var download = function(uri, filename, callback){
+  request.head(uri, function(err, res, body){
+      if (res.headers['content-type']) {
+          console.log('content-type:', res.headers['content-type']);
+          console.log('content-length:', res.headers['content-length']);
+          request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+      } else {
+          setTimeout(function() {
+            download(uri, filename, callback)
+        }, 100);
+      }
+  });
+};
 
-const runSnapshotAnalysis = async(snapshot_url) => {
-    console.log('Fetching snapshot from', snapshot_url);
-    const file = fs.createWriteStream('./temp_image.jpg');
-    await new Promise((resolve, reject) => {
-        https.get(snapshot_url, function(response) {
-            try {
-                response.pipe(file);
-                resolve()
-            }catch (e) {
-                reject(e)
-            }
-        });
-    });
+const analyse = async (local_path) => {
     console.log('loading image from local');
     const img = new Image();
-    img.src = './temp_image';
+    img.src = local_path;
     const canvas = createCanvas(img.width, img.height);
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
@@ -38,6 +38,12 @@ const runSnapshotAnalysis = async(snapshot_url) => {
         console.log(`${keypoint.part}: (${keypoint.position.x},${keypoint.position.y})`);
     }
     console.log('end');
+}
+
+const runSnapshotAnalysis = async(snapshot_url) => {
+    console.log('Fetching snapshot from', snapshot_url);
+    const temp_file_name = 'testings.jpeg';
+    download(snapshot_url, temp_file_name, function() { analyse(temp_file_name)})
 };
 
 const findSnapshotLink = async(snapshot_url) => {
