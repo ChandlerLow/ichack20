@@ -2,9 +2,11 @@ import os
 from flask import Flask, send_from_directory, request
 
 from service.Crimes.db import db_get_all_alerts, db_update_category, db_add_alert
+from service.Crimes.s3 import upload_to_bucket
 
 app = Flask(__name__, static_folder='react/build')
 
+s3_bucket = 'ichack20-images'
 
 # Serve React App
 @app.route('/api/alerts', methods=['GET'])
@@ -14,7 +16,14 @@ def get_all_alerts():
 
 @app.route('/api/alerts', methods=['POST'])
 def add_alert():
-    image_path = request.json['image_path']
+    meraki_image_path = request.json['image_path']
+    # processing to temp download local image
+
+    # upload to s3 bucket
+    temp_file_name = ""
+    upload_to_bucket(temp_file_name, s3_bucket, temp_file_name)
+    # image path should now be https://ichack20-images.s3.amazonaws.com/<imagename>
+    image_path = "https://ichack20-images.s3.amazonaws.com/" + temp_file_name
     db_add_alert(image_path)
     return "Success"
 
