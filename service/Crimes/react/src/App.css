@@ -1,6 +1,6 @@
 .App {
-  text-align: center;
-}
+   text-align: center;
+ }
 
 .App-logo {
   height: 40vmin;
@@ -35,4 +35,18 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.map {
+  width: 600px;
+  height: 300px
+}
+
+.whiteText {
+  color: white;
+}
+
+.resolved{
+  width: 50%;
+  float:left;
 }

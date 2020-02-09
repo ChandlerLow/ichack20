@@ -1,0 +1,7 @@
+.resolvedList {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow-y: scroll;
+}
