@@ -24,7 +24,7 @@ def add_alert():
     url = meraki_image_path
     filename = request.json['image_name'] + '.jpg'
     r = requests.get(url, allow_redirects=True)
-    fw = open("images/" + filename, 'wb')
+    fw = open(filename, 'wb')
     fw.write(r.content)
     fw.close()
     # upload to s3 bucket

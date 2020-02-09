@@ -10,7 +10,7 @@ class OverlayIncident extends Component {
                 <p className={'overlay-info'}>
                     Click outside of the image to close
                 </p>
-                <div className={'img-wrapper'} onClick={(e) => e.stopPropagation()}>
+                <div className={'img-wrapper'}>
                     <img className={'overlay-image'}
                          src={image}
                          alt="video feed"
