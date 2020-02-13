@@ -1,0 +1,5 @@
+requests
+botocore
+boto3
+pymysql
+flask
