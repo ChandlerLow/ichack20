@@ -16,6 +16,8 @@ RUN yarn install && \
 
 WORKDIR /app/service/Crimes
 
+ENV PORT 5000
+
 ENTRYPOINT ["python"]
 
 CMD ["app.py"]
