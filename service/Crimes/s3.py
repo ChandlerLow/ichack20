@@ -3,7 +3,7 @@ from botocore.exceptions import NoCredentialsError
 import requests
 
 ACCESS_KEY = 123
-SECRET_KEY = 124
+SECRET_KEY = 1244
 
 
 def upload_to_bucket(local_file, bucket, s3_file):
