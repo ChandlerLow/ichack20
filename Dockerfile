@@ -21,6 +21,4 @@ WORKDIR /app/service/Crimes
 
 ENV PORT 5000
 
-ENTRYPOINT [ "python" ]
-
-CMD [ "app.py" ]
+CMD [ "python", "app.py" ]
